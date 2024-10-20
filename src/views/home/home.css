@@ -1,0 +1,18 @@
+.home{
+
+}
+.home .ant-tabs-tab{
+    display: flex;
+    justify-content: center;
+    width: 25%;
+}
+.home .ant-tabs-nav-list{
+  width: 100%;
+}
+.ant-tabs-tab-btn{
+   text-align: center;
+}
+.ant-tabs-nav-wrap{
+  display: flex;
+  justify-content: space-between;
+}
