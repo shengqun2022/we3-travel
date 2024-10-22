@@ -9,9 +9,9 @@
 
 import React, { useEffect, useState } from "react";
 import { message,Button } from "antd";
-import { request } from "../../../utils/request";
-import api from "../../../api/index";
-import "./news.css";
+import { request } from "../../utils/request";
+import api from "../../api/index";
+import "./detail.css";
 import * as dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import qs from "qs";
@@ -36,43 +36,6 @@ const App = () => {
       setData(res.data);
     }
   };
-  // const thumbsUpHandler = (item, type) => {
-  //   if (!common.account) {
-  //     messageApi.open({
-  //       type: "error",
-  //       content: "请先链接钱包!",
-  //     });
-  //     return;
-  //   }
-  //   if (common.account === item.owner) {
-  //     messageApi.open({
-  //       type: "error",
-  //       content: "不能给自己的攻略点赞",
-  //     });
-  //     return;
-  //   }
-  //   thumbsUp(item, type);
-  // };
-  // const thumbsUp = async (item, type) => {
-  //   const params = {
-  //     id: item.id,
-  //     from: common.account,
-  //     status: type,
-  //   };
-  //   const paramsStr = qs.stringify(params);
-  //   const res = await request({
-  //     type: "get",
-  //     url: api.thumbsUp + "?" + paramsStr,
-  //   });
-  //   if (res) {
-  //     setCount((prev) => prev + 1);
-  //     messageApi.open({
-  //       type: "success",
-  //       content: "点赞成功",
-  //     });
-  //   }
-  // };
-
   let listNode = data.map((item, key) => {
     return (
       <li className="width-100" key={key}>

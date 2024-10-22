@@ -1,6 +1,7 @@
 import { message } from 'antd'
 import axios from 'axios'
 import modal from 'antd/es/modal'
+import { BASE_URL} from '../config/constant'
 // 全局配置message 只能有一个错误error
 message.config({
   maxCount: 1
@@ -56,44 +57,44 @@ function createService() {
       console.log(error,'error')
       const status = error.response.status
       switch (status) {
-        // case 400:
-        //   error.message = '请求错误'
-        //   break
-        // case 401:
-        //   /* token 过期提示 */
-        //   modal.error({
-        //     title: '登录过期',
-        //     content: '您的登录已过期，您可以关掉当前页面，从主应用重新登录',
-        //     footer:null,
-        //   });
-        //   break
-        // case 403:
-        //   error.message = '拒绝访问'
-        //   break
-        // case 404:
-        //   error.message = '请求出错'
-        //   break
-        // case 408:
-        //   error.message = '请求超时'
-        //   break
-        // case 500:
-        //   message.error(error.response?.data?.description || error.response.statusText )
-        //   break
-        // case 501:
-        //   error.message = '服务未实现'
-        //   break
-        // case 502:
-        //   error.message = '网关错误'
-        //   break
-        // case 503:
-        //   error.message = '服务不可用'
-        //   break
-        // case 504:
-        //   error.message = '网关超时'
-        //   break
-        // case 505:
-        //   error.message = 'HTTP 版本不受支持'
-        //   break
+        case 400:
+          error.message = '请求错误'
+          break
+        case 401:
+          /* token 过期提示 */
+          modal.error({
+            title: '登录过期',
+            content: '您的登录已过期，您可以关掉当前页面，从主应用重新登录',
+            footer:null,
+          });
+          break
+        case 403:
+          error.message = '拒绝访问'
+          break
+        case 404:
+          error.message = '请求出错'
+          break
+        case 408:
+          error.message = '请求超时'
+          break
+        case 500:
+          message.error(error.response?.data?.description || error.response?.data?.error )
+          break
+        case 501:
+          error.message = '服务未实现'
+          break
+        case 502:
+          error.message = '网关错误'
+          break
+        case 503:
+          error.message = '服务不可用'
+          break
+        case 504:
+          error.message = '网关超时'
+          break
+        case 505:
+          error.message = 'HTTP 版本不受支持'
+          break
         default:
           return Promise.reject(error.response)
       }
@@ -105,9 +106,11 @@ function createService() {
 /** 创建请求方法 */
 function createRequestFunction(service) {
   return function (config) {
+    console.log(config,'config')
     const configDefault = {
-      baseURL: 'http://101.126.153.89:8080',
-      data: config.data
+      baseURL: BASE_URL,
+      data: config.data,
+      method: config.type || 'post'
     }
     return service(Object.assign(configDefault,config))
   }
