@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-22 15:54:17
+ * @LastEditTime: 2024-10-22 16:27:10
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,7 +12,7 @@ import {  Input,Button,Space} from 'antd';
 import "./create.css"
 import api from '../../../api/index'
 import { request } from '../../../utils/request';
-import DEFAULT_ADDRESS,{ BASE_URL } from '../../../config/constant'
+import { BASE_URL } from '../../../config/constant'
 import {useSelector} from 'react-redux'
 const { TextArea } = Input;
 
@@ -23,11 +23,9 @@ async function sseRequest(url) {
           "Content-Type": "application/json",
       },
   });
-
   if (!response.ok) {
       throw new Error('Network response was not ok');
   }
-
   return response.body.getReader();
 }
 
@@ -52,7 +50,6 @@ const App = () => {
       const decoder = new TextDecoder();
       while (true) {
           const { done, value } = await reader.read();
-          console.log(done, 'done')
           if (done) {
             setDisable(false)
             break;
@@ -65,8 +62,9 @@ const App = () => {
   }
   const saveGuide = async()=> {
     const params= {
-      owner: DEFAULT_ADDRESS,
-      content: guideContent
+      owner: common.account,
+      content:guideKey,
+      description:guideContent
     }
     const res = await request({
       type:"post",
@@ -79,10 +77,10 @@ const App = () => {
 }
   const displayText = ()=> {
     if (index < guideContent.length-1) {
-      setGuideContent((prevContent) => prevContent + guideContent[index]); // 正确地使用 setState
+      setGuideContent((prevContent) => prevContent + guideContent[index]); 
       setTimeout(()=> {
         setIndex((prevIndex) => prevIndex + 1); 
-      }, 500); // 每100毫秒显示一个字
+      }, 500); // 每500毫秒显示一个字
     } 
   }
   return  <div>
