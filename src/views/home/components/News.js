@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-21 23:25:04
+ * @LastEditTime: 2024-10-22 14:20:02
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -72,11 +72,21 @@ const App = () => {
     }
   };
 
+  const toDetail =  (id)=> {
+    navigate(`/detail?id=${id}`)
+  }
+
+  const toUser =  (address)=> {
+    navigate(`/user?id=${address}`)
+  }
+
   let listNode = data.map((item, key) => {
     return (
-      <li className="width-100" key={key}>
+      <li className="width-100 cursor-pointer" key={key}>
         <div className="width-100">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center"  onClick={() => {
+                toUser(item.owner)
+              }}>
             <div className="user flex items-center">
               <img className="avatar" src={item.avatar} />
               <p className="user-name text-bold">{item.owner}</p>
@@ -89,7 +99,6 @@ const App = () => {
                 className="cursor-pointer"
                 onClick={() => thumbsUpHandler(item, "1")}
               >
-                {" "}
                 <LikeOutlined /> {item.like_count}
               </div>
             </div>
@@ -98,7 +107,7 @@ const App = () => {
             <p
               className="title text-bold"
               onClick={() => {
-                navigate("/mine");
+                toDetail(item.id)
               }}
             >
               {item.content}

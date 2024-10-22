@@ -274,7 +274,6 @@
   margin-bottom:48px !important;
 }
 
-// 字体
 .font-12{
    font-size: 12px;
 }
@@ -291,15 +290,19 @@
    font-size: 20px;
 }
 
-//color 
 .primary {
   color:#409eff !important;
+}
+.dark-text {
+  color:#999 !important;
 }
 .black {
   color:#000 !important;
 }
+.danger{
+  color: red;
+}
 
-// other
 .cursor-pointer{
   cursor: pointer !important;
 }

@@ -2,12 +2,12 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-22 10:29:10
+ * @LastEditTime: 2024-10-22 15:54:17
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import {  Input,Button,Space} from 'antd';
 import "./create.css"
 import api from '../../../api/index'
@@ -34,20 +34,30 @@ async function sseRequest(url) {
 const App = () => {
   const common = useSelector(state=> state.common)
   const [guideKey, setGuideKey] = useState('');
+  const [disable, setDisable] = useState(false);
   const [guideContent, setGuideContent] = useState('');
   const [index, setIndex] = useState(0);
   const onChange = ((e)=> {
     setGuideKey(e.target.value)
   })
+
+  const refresh= () => {
+    setIndex(0)
+    setGuideContent("")
+    setDisable(true)
+  }
   const createGuide = async()=> {
+      refresh()
       const reader = await sseRequest(`${BASE_URL}${api.generateGuide}?cueWord=${guideKey}`);
       const decoder = new TextDecoder();
       while (true) {
           const { done, value } = await reader.read();
-          console.log(done, value ,111)
-          if (done) break;
+          console.log(done, 'done')
+          if (done) {
+            setDisable(false)
+            break;
+          }
           const chunk = decoder.decode(value, { stream: true });
-          console.log(chunk); // 处理接收到的数据
           setGuideContent(prev=> prev+ chunk )
           displayText()
       }
@@ -63,7 +73,7 @@ const App = () => {
       url: api.createGuide,
       data:params
     })
-    if(res && res.status===200) {
+    if(res && res.data) {
        alert('保存成功')
     }
 }
@@ -73,7 +83,7 @@ const App = () => {
       setTimeout(()=> {
         setIndex((prevIndex) => prevIndex + 1); 
       }, 500); // 每100毫秒显示一个字
-    }
+    } 
   }
   return  <div>
     <Space.Compact
@@ -82,12 +92,12 @@ const App = () => {
       }}
     >
       <Input className='my-input' value={guideKey} placeholder="输入文字生成攻略" onChange={onChange} />
-      <Button type="primary" onClick={createGuide}> 生成攻略</Button>
+      <Button type="primary" disabled={disable} onClick={createGuide}> 生成攻略</Button>
     </Space.Compact>
     {/* <Input /> */}
     <br/>
     <TextArea  value={guideContent} rows={10} />
-    <Button className="btn" type="primary" onClick={saveGuide}>保存</Button>
+    <Button className="btn" disabled={disable} type="primary" onClick={saveGuide}>保存</Button>
   </div>
 };
 export default App;
