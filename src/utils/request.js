@@ -106,7 +106,6 @@ function createService() {
 /** 创建请求方法 */
 function createRequestFunction(service) {
   return function (config) {
-    console.log(config,'config')
     const configDefault = {
       baseURL: BASE_URL,
       data: config.data,
