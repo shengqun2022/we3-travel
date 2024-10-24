@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-10-18 16:50:01
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-24 10:07:23
+ * @LastEditTime: 2024-10-24 11:13:46
  * @FilePath: /web3-travel/src/index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,7 +18,6 @@ import store, { persistor } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react';
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Account } from './components/account'
 import { config } from './components/config'
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
