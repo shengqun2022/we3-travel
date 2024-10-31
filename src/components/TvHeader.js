@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-24 14:13:28
+ * @LastEditTime: 2024-10-31 15:37:53
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,8 +12,12 @@ import './header.css'
 import { Button,Dropdown,Space ,Modal,Spin} from 'antd';
 import { WalletOptions } from './wallet-options'
 import { useAccount,useDisconnect} from 'wagmi'
+import {useDispatch} from 'react-redux'
+import { fetchCancelOrderData ,fetchSuccessOrderData,fetchAllOrdersData} from '../redux/slice/orderSlice'
 
-const App = (router) => {
+
+const App = ({router}) => {
+  const dispatch = useDispatch()
   const { address,isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,16 +27,19 @@ const App = (router) => {
     setTimeout(()=> {
       setSpinning(false)
     },500)
+    if(isConnected) {
+      dispatch(fetchAllOrdersData())
+    }
   }, [isConnected]);
   
   const showModal = ()=> {
     setIsModalOpen(true)
   }
   const toHome = () => {
-    router.router.navigate('/');
+    router.navigate('/');
   };
   const handleNavigate = () => {
-    router.router.navigate('/mine');
+    router.navigate('/mine');
   };
   const handleOk = ()=> {
     setIsModalOpen(false)
@@ -63,9 +70,11 @@ const App = (router) => {
             trigger={['click']}
           >
               <Space>
-              <Button className="account text-line-1">{address}</Button>
+              <div className="wallet-btn text-center flex items-center justify-center cursor-pointer ">
+                <div className="width-80 text-line-1 text-center">{address}</div>
+              </div>
               </Space>
-          </Dropdown> :  <Button type="primary" onClick={showModal} >链接钱包</Button>}
+          </Dropdown> :  <div className="wallet-btn primary flex items-center justify-center cursor-pointer" onClick={showModal} >链接钱包</div>}
       </div>
       <Modal title="钱包链接" open={isModalOpen}  footer={null} width={200} closable maskClosable={true} onCancel={()=> {
           setIsModalOpen(false)
