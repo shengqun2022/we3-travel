@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-22 14:49:04
+ * @LastEditTime: 2024-10-31 16:37:52
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -24,12 +24,12 @@ const App = () => {
   const common = useSelector((state) => state.common);
   const [searchParams] = useSearchParams();
   useEffect(() => {
-    getUserInfo();
+    // getUserInfo();
     getNewsData();
   }, []);
 
   useEffect(() => {
-    getUserInfo();
+    // getUserInfo();
   }, [count]);
   const getUserInfo = async () => {
     const params = {
@@ -81,9 +81,9 @@ const App = () => {
             <p
               className="title text-bold"
             >
-              {item.content}
+              {item.title}
             </p>
-            <p className="desc width-100 text-line-1">{item.description}</p>
+            <p className="desc width-100 text-line-1">{item.content}</p>
           </div>
           <div className="flex justify-between items-center">
               <div className="font-12 dark-text">

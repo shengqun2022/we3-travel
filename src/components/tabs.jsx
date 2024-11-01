@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-10-22 23:24:37
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-30 23:46:17
+ * @LastEditTime: 2024-10-31 17:22:34
  * @FilePath: /web3-travel/src/components/wallet-option.jsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,12 +16,7 @@ export function TvTabs() {
   const [path, setPath] = useState('/');
   React.useEffect(()=> {
     setPath(location.pathname)
-    console.log(location.pathname)
   },[])
-  // React.useEffect(()=> {
-   
-  // },[path])
-
   const onChange= (activeKey)=> {
     navigate(activeKey)
     setPath(activeKey)
@@ -29,7 +24,7 @@ export function TvTabs() {
   const items = [
     {
       key: '/',
-      label: '新闻',
+      label: '攻略列表',
     },
     {
       key: '/create',

@@ -1,0 +1,11 @@
+.buy-bar{
+  width: 80%;
+}
+.buy-box{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 60px;
+  line-height: 60px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+}

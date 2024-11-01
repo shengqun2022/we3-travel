@@ -2,14 +2,14 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-30 23:35:47
+ * @LastEditTime: 2024-11-01 11:26:21
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
+import { message,Spin } from "antd";
 import { LikeOutlined,UserOutlined } from "@ant-design/icons";
 import { request } from "../../utils/request";
 import api from "../../api/index";
@@ -20,6 +20,7 @@ import { useAccount} from 'wagmi'
 import {TvTabs} from '../../components/tabs'
 const App = () => {
   const { address } = useAccount()
+  const [spinning, setSpinning] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
@@ -27,16 +28,20 @@ const App = () => {
   const navigate = useNavigate();
   useEffect(() => {
     getNewsData();
-    thumbsUped();
+    if(address) {
+      thumbsUped();
+    }
   }, [count]);
 
   const getNewsData = async () => {
+    setSpinning(true)
     const res = await request({
       type: "get",
       url: api.guideRec,
     });
     if (res) {
       setData(res.data);
+      setSpinning(false)
     }
   };
   const thumbsUpHandler = (e,item, type) => {
@@ -103,7 +108,7 @@ const App = () => {
 
   let listNode = data?.map((item, key) => {
     return (
-      <li className="width-100 cursor-pointer" key={key}>
+      <li className="width-100 cursor-pointer list-item" key={key}>
         <div className="width-100">
           <div className="flex justify-between items-center"  onClick={() => {
                 toUser(item.owner)
@@ -112,7 +117,7 @@ const App = () => {
               <div className="avatar-box flex items-center justify-center">
                 {item.avatar ? <img className="avatar" src={item.avatar} /> :  <UserOutlined className="font-20" />  }
               </div>
-              <p className="user-name text-bold m-l-4">{item.owner}</p>
+              <p className="user-name text-bold m-l-4">{item.owner.slice(-6)}</p>
             </div>
             
           </div>
@@ -149,6 +154,7 @@ const App = () => {
       {contextHolder}
       <TvTabs></TvTabs>
       <ul className="news">{listNode}</ul>
+      <Spin spinning={spinning}  fullscreen />
     </div>
   );
 };

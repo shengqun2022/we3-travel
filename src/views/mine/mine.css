@@ -5,17 +5,13 @@
   color: #666;
   font-size: 14px;
 }
-.user .avatar-box{
+.avatar {
  width: 60px;
  height: 60px;
  border-radius: 50%;
- background: #26a6ed21;
-}
-.news .avatar {
- width: 48px;
- height: 48px;
- border-radius: 50%;
- margin-right: 10px;
+ background: #53b2ed;
+ color: #fff;
+ 
 }
 ul,li {
  list-style: none;

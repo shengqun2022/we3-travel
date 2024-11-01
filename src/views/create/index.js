@@ -2,18 +2,17 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-10-30 23:40:13
+ * @LastEditTime: 2024-11-01 10:39:45
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 import React, { useState } from 'react';
-import {  Input,Button,Space} from 'antd';
+import {  Input,Button,Space,message} from 'antd';
 import "./create.css"
 import api from '../../api/index'
 import { request } from '../../utils/request';
 import { BASE_URL } from '../../config/constant'
-// import {useSelector} from 'react-redux'
 import { useAccount} from 'wagmi'
 import {TvTabs} from '../../components/tabs'
 
@@ -34,8 +33,8 @@ async function sseRequest(url) {
 }
 
 const App = () => {
+  const [messageApi,contextHolder] = message.useMessage();
   const { address } = useAccount()
-  // const common = useSelector(state=> state.common)
   const [guideKey, setGuideKey] = useState('');
   const [disable, setDisable] = useState(false);
   const [guideContent, setGuideContent] = useState('');
@@ -66,6 +65,20 @@ const App = () => {
       
   }
   const saveGuide = async()=> {
+    if(!address) {
+      messageApi.open({
+        type: "warning",
+        content: "请先链接钱包",
+      });
+      return 
+    }
+    if(!guideContent) {
+      messageApi.open({
+        type: "warning",
+        content: "请先生成攻略再保存",
+      });
+      return 
+    }
     const params= {
       owner: address,
       title:guideKey,
@@ -77,7 +90,10 @@ const App = () => {
       data:params
     })
     if(res && res.data) {
-       alert('保存成功')
+      messageApi.open({
+        type: "success",
+        content: "攻略创建成功",
+      });
     }
 }
   const displayText = ()=> {
@@ -104,6 +120,7 @@ const App = () => {
     <div className='flex justify-center'>
       <Button className="btn" disabled={disable}  type="primary" onClick={saveGuide}>保存</Button>
     </div>
+    {contextHolder}
   </div>
 };
 export default App;
