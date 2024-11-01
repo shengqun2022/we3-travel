@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-11-01 15:30:33
+ * @LastEditTime: 2024-11-01 22:52:28
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -41,6 +41,9 @@ const App = () => {
   const [index, setIndex] = useState(0);
   const onChange = ((e)=> {
     setGuideKey(e.target.value)
+  })
+  const textChange = ((e)=> {
+    setGuideContent(e.target.value)
   })
 
   const refresh= () => {
@@ -116,7 +119,7 @@ const App = () => {
     </Space.Compact>
     {/* <Input /> */}
     <br/>
-    <TextArea  value={guideContent} rows={20} />
+    <TextArea  value={guideContent} rows={20}  onChange={textChange}/>
     <div className='flex justify-center'>
       <Button className="btn" disabled={disable}  type="primary" onClick={saveGuide}>保存</Button>
     </div>
