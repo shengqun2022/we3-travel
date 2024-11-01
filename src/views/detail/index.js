@@ -2,13 +2,13 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-11-01 11:30:59
+ * @LastEditTime: 2024-11-01 15:39:08
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 import React, { useEffect, useState } from "react";
-import { message, Button } from "antd";
+import { message, Button,Spin } from "antd";
 import { request } from "../../utils/request";
 import api from "../../api/index";
 import "./detail.css";
@@ -19,10 +19,12 @@ const App = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [guideInfo, setGuideInfo] = useState({});
+  const [spinning, setSpinning] = useState(false);
   useEffect(() => {
     getDetail();
   }, []);
   const getDetail = async () => {
+    setSpinning(true)
     const params = {
       id: searchParams.get('id')
     };
@@ -33,6 +35,7 @@ const App = () => {
     });
     if (res && res.data) {
       setGuideInfo(res.data);
+      setSpinning(false)
     }
   };
   
@@ -56,6 +59,7 @@ const App = () => {
             <Button onClick={back}>返回</Button> 
         </div>
       </div>
+      <Spin spinning={spinning}  fullscreen />
     </div>
   );
 };

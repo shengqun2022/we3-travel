@@ -2,13 +2,13 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-11-01 10:53:43
+ * @LastEditTime: 2024-11-01 16:48:23
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 import React, { useEffect, useState } from "react";
-import { message,Button,Spin } from "antd";
+import { message,Button,Spin,Input } from "antd";
 import { request } from "../../utils/request";
 import api from "../../api/index";
 import "./trade.css";
@@ -18,25 +18,31 @@ import { ethers} from "ethers";
 import { abi } from '../../config/abi'
 import contractAddress from  '../../config/contract'
 import {TvTabs} from '../../components/tabs'
-
+const { Search } = Input;
 const App = () => {
   const [messageApi,contextHolder] = message.useMessage();
   const [data, setData] = useState([]);
-  const [orderData, setOrderData] = useState([]);
+  const [defaultData, setDefaultData] = useState([]);
   const [spinning, setSpinning] = useState(false);
   const { address } = useAccount()
   useEffect(() => {
     getNewsData()
+    if(address) {
+      listenr()
+    }
   }, []);
 
-  useEffect(() => {
-    setOrderData([])
-    setTimeout(()=> {
-      if(address) {
-        // getGuideOrderData()
+  const listenr = async ()=> {
+    const provider = new ethers.BrowserProvider(window.ethereum)
+    const signer = await provider.getSigner();
+    const guideContract = await new ethers.Contract(contractAddress, abi, signer)
+    guideContract.addListener("NFTBought", (eventAddress) => {
+      if(eventAddress ===  address) {
+        getNewsData()
+        setSpinning(false)
       }
-    },10)
-  }, [data]);
+     })
+  }
 
   const getNewsData = async () => {
     setSpinning(true)
@@ -45,35 +51,25 @@ const App = () => {
       url: api.guideRec,
     });
     if(res) {
-      setData(res.data);
+      const result = res.data.filter(item=> item.sales_status ===1).filter(x=> x.owner !== address)
+      setDefaultData(result)
+      setData(result);
       setSpinning(false)
     }
   };
+  const searchHandler =  (key) => {
+    setData(defaultData.filter(item=> item.title.includes(key)))
+  };
   
-  const getGuideOrderData = async ()=> {
-    const provider = new ethers.BrowserProvider(window.ethereum)
-    const signer = await provider.getSigner();
-    const guideContract = await new ethers.Contract(contractAddress, abi, signer)
-    data.forEach(async (element) => {
-        const row = await guideContract?._tokenInfos(element.id)
-        if(row.isListed) {
-          const newRow = {
-            ...element,
-            price:Number(row.price)
-          }
-          console.log(newRow,'newRow')
-          setOrderData((prevData) => [...prevData,newRow ]);
-        }
-     });
-  }
   const buy = async (item)=> {
-    if(item.owner === address) {
+    if(!address) {
       messageApi.open({
         type: "warning",
-        content: "不能购买自己的攻略",
+        content: "请先链接钱包",
       });
       return 
     }
+    setSpinning(true)
     const provider = new ethers.BrowserProvider(window.ethereum)
     const signer = await provider.getSigner();
     const guideContract = await new ethers.Contract(contractAddress, abi, signer)
@@ -108,6 +104,12 @@ const App = () => {
     <div>
       {contextHolder}
       <TvTabs></TvTabs>
+      <div className="flex justify-end">
+        <Search placeholder="输入关键字搜索" enterButton="搜索" style={{width: '400px'}} onSearch={(vaule)=> {
+          searchHandler(vaule)
+        }} />
+      </div>
+     
       <ul className="news">{listNode}</ul>
       <Spin spinning={spinning}  fullscreen />
     </div>

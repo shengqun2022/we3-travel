@@ -2,7 +2,7 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-11-01 11:26:21
+ * @LastEditTime: 2024-11-01 15:35:57
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -63,6 +63,7 @@ const App = () => {
     thumbsUp(item, type);
   };
   const thumbsUp = async (item, type) => {
+    setSpinning(true)
     const params = {
       id: item.id,
       from: address,
@@ -75,6 +76,7 @@ const App = () => {
     });
     if (res) {
       setCount((prev) => prev + 1);
+      setSpinning(false)
       messageApi.open({
         type: "success",
         content: thumbsList?.includes(item.id.toString()) ? "取消成功": "点赞成功",
@@ -83,6 +85,7 @@ const App = () => {
   };
 
   const thumbsUped = async () => {
+    setSpinning(true)
     const params = {
       id: address,
     };
@@ -92,6 +95,7 @@ const App = () => {
       url: api.userThumbsUped + "?" + paramsStr,
     });
     if (res) {
+      setSpinning(false)
       setThumbsList(res.data || [])
     }
   };
@@ -109,22 +113,22 @@ const App = () => {
   let listNode = data?.map((item, key) => {
     return (
       <li className="width-100 cursor-pointer list-item" key={key}>
-        <div className="width-100">
-          <div className="flex justify-between items-center"  onClick={() => {
+        <div className="width-100 flex justify-between items-center">
+          <div className="flex justify-between items-center "  onClick={() => {
                 toUser(item.owner)
               }}>
-            <div className="user flex items-center">
+            <div className="user">
               <div className="avatar-box flex items-center justify-center">
                 {item.avatar ? <img className="avatar" src={item.avatar} /> :  <UserOutlined className="font-20" />  }
               </div>
-              <p className="user-name text-bold m-l-4">{item.owner.slice(-6)}</p>
+              <p className="user-name text-bold m-l-4 primary">{item.owner.slice(-6)}</p>
             </div>
             
           </div>
-          <div className="width-100">
+          <div className="width-100 m-l-24">
             <div className="flex items-center">
             <p
-              className="title text-bold m-r-16"
+              className="title font-14 text-bold m-r-16"
               onClick={() => {
                 toDetail(item.id)
               }}
@@ -143,7 +147,6 @@ const App = () => {
               {dayjs(item.create_time * 1000).format("YYYY-MM-DD HH:MM:ss")}
             </div>
           </div>
-         
         </div>
       </li>
     );
