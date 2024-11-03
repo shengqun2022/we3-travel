@@ -9,3 +9,6 @@
   line-height: 60px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
 }
+.desc{
+  white-space: pre-wrap;
+}

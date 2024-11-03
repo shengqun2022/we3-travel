@@ -26,3 +26,19 @@ ul,li {
 .list-item{
   margin-bottom: 15px;
 }
+.status{
+   display: inline-block;
+   padding:0 10px;
+   border-radius: 4px;
+   color: #fff;
+   text-align: center;
+}
+.status.pending{
+  background: #ff4e00;
+  
+}
+.status.process{
+  display: inline-block;
+  padding: 5px;
+  background: blue;
+}
