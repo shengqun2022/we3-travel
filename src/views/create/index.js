@@ -2,13 +2,14 @@
  * @Author: shengqun.zhu shengqun2022@gmail.com
  * @Date: 2024-09-19 16:30:16
  * @LastEditors: shengqun.zhu shengqun2022@gmail.com
- * @LastEditTime: 2024-11-01 22:52:28
+ * @LastEditTime: 2024-11-04 10:14:31
  * @FilePath: /myapp/front/src/views/Mine.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 import React, { useState } from 'react';
 import {  Input,Button,Space,message} from 'antd';
+import { useNavigate } from "react-router-dom";
 import "./create.css"
 import api from '../../api/index'
 import { request } from '../../utils/request';
@@ -39,6 +40,7 @@ const App = () => {
   const [disable, setDisable] = useState(false);
   const [guideContent, setGuideContent] = useState('');
   const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
   const onChange = ((e)=> {
     setGuideKey(e.target.value)
   })
@@ -65,7 +67,6 @@ const App = () => {
           setGuideContent(prev=> prev+ chunk )
           displayText()
       }
-      
   }
   const saveGuide = async()=> {
     if(!address) {
@@ -97,6 +98,7 @@ const App = () => {
         type: "success",
         content: "攻略创建成功",
       });
+      navigate('/mine');
     }
 }
   const displayText = ()=> {
